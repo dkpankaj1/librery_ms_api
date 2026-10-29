@@ -49,9 +49,58 @@ Response handling is centralized in the `ApiResponse` trait
 
 ## Endpoints
 
+### Health
+
+#### 1. Health Check & Application Details
+
+```
+GET /api/health
+```
+
+Public endpoint returning combined health status and application details.
+
+**Response `200`:**
+```json
+{
+  "success": true,
+  "message": "Service is healthy",
+  "data": {
+    "status": "ok",
+    "database": "connected",
+    "application": {
+      "name": "Laravel",
+      "environment": "production",
+      "version": "1.0.0",
+      "php_version": "8.3.x",
+      "laravel_version": "13.x",
+      "timezone": "UTC",
+      "api_status": "available"
+    }
+  }
+}
+```
+
+| Field                      | Description                                  |
+|----------------------------|----------------------------------------------|
+| `status`                   | `ok` when the service is up                  |
+| `database`                 | `connected` or `disconnected`                |
+| `application.name`         | App name (`config('app.name')`)               |
+| `application.environment`  | Current environment (e.g. `production`)      |
+| `application.version`      | App version                                  |
+| `application.php_version`  | Running PHP version                          |
+| `application.laravel_version` | Laravel framework version                |
+| `application.timezone`     | Configured timezone                          |
+| `application.api_status`   | API availability (`available`)               |
+
+| Status | Condition |
+|--------|-----------|
+| `200`  | Success |
+
+---
+
 ### Auth
 
-#### 1. Login
+#### 2. Login
 
 ```
 POST /api/login
@@ -93,7 +142,7 @@ Authenticates a user and returns an access token along with the user and their a
 
 ---
 
-#### 2. Get Authenticated User
+#### 3. Get Authenticated User
 
 ```
 GET /api/me
@@ -122,7 +171,7 @@ Returns the authenticated user and their library.
 
 ---
 
-#### 3. Update Profile
+#### 4. Update Profile
 
 ```
 PUT /api/me/profile
@@ -156,7 +205,7 @@ Updates the authenticated user's profile. All fields are optional.
 
 ---
 
-#### 4. Change Password
+#### 5. Change Password
 
 ```
 PUT /api/me/password
@@ -193,7 +242,7 @@ PUT /api/me/password
 
 ---
 
-#### 5. Logout
+#### 6. Logout
 
 ```
 POST /api/logout
@@ -216,7 +265,7 @@ Revokes the current access token.
 
 All library endpoints require authentication.
 
-#### 6. Create Library
+#### 7. Create Library
 
 ```
 POST /api/libraries
@@ -256,7 +305,7 @@ POST /api/libraries
 
 ---
 
-#### 7. Show Library
+#### 8. Show Library
 
 ```
 GET /api/libraries/{library}
@@ -284,7 +333,7 @@ GET /api/libraries/{library}
 
 ---
 
-#### 8. Update Library
+#### 9. Update Library
 
 ```
 PUT /api/libraries/{library}
@@ -300,6 +349,7 @@ PUT /api/libraries/{library}
 
 | Method | Path                    | Auth   | Description            |
 |--------|-------------------------|--------|------------------------|
+| GET    | `/api/health`           | No     | Health check + app details |
 | POST   | `/api/login`            | No     | Authenticate & get token |
 | GET    | `/api/me`               | Yes    | Authenticated user + library |
 | PUT    | `/api/me/profile`       | Yes    | Update profile         |
